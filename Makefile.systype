@@ -6,7 +6,8 @@
 #
 #############
 
-SYSTYPE="Frontera"
+
+#SYSTYPE="Frontera"
 #SYSTYPE="Stampede2"
 #SYSTYPE="Wheeler"
 #SYSTYPE="MacBookPro"
@@ -45,3 +46,5 @@ SYSTYPE="Frontera"
 #SYSTYPE="Stampede"
 #SYSTYPE="Zwicky"
 #SYSTYPE="BlueWaters"
+#SYSTYPE="SHAO-HPCLUSTER"
+SYSTYPE="SJTU-Gravity"

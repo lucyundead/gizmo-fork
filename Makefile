@@ -1083,6 +1083,55 @@ OPT     +=  -DOLD_HDF5
 endif
 
 
+ifeq ($(SYSTYPE),"SHAO-HPCLUSTER")
+CC       =  mpiicc   # sets the C-compiler
+CXX      =  mpiicpc
+FC       =  $(CC)
+
+OPTIMIZE = -Wall -g -O3 -xHOST -ipo -no-prec-div -fp-model fast=2 -fast-transcendentals -funroll-loops ## optimizations for intel compilers
+OPTIMIZE += -pg ## profiling for intel compilers
+
+#OPTIMIZE = -g -O1 -ffast-math -funroll-loops -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload -fipa-cp-clone  ## optimizations for gcc compilers (1/2)
+
+#OPTIMIZE += -ftree-loop-distribute-patterns -fvect-cost-model -ftree-partial-pre   ## optimizations for gcc compilers (2/2)
+
+OPTIMIZE += -parallel -qopenmp # for openmp
+
+GSL_INCL =  -I/share/home/jtshen/soft/gsl/include
+GSL_LIBS =  -L/share/home/jtshen/soft/gsl/lib
+FFTW_INCL=  -I/share/home/jtshen/soft/fftw2/single/include
+FFTW_LIBS=  -L/share/home/jtshen/soft/fftw2/single/lib
+MPICHLIB =
+HDF5INCL =  -I/usr/include -DH5_USE_16_API
+HDF5LIB  =  -L/usr/lib64 -lhdf5 -lz
+OPT     +=  -DOLD_HDF5 -DUSE_MPI_IN_PLACE
+endif
+
+ifeq ($(SYSTYPE),"SJTU-Gravity")
+CC       =  mpiicc   # sets the C-compiler
+CXX      =  mpiicpc
+FC       =  $(CC)
+
+OPTIMIZE = -Wall -g -O3 -xHOST -ipo -no-prec-div -fp-model fast=2 -fast-transcendentals -funroll-loops ## optimizations for intel compilers
+OPTIMIZE += -pg ## profiling for intel compilers
+
+#OPTIMIZE = -g -O1 -ffast-math -funroll-loops -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload -fipa-cp-clone  ## optimizations for gcc compilers (1/2)
+
+#OPTIMIZE += -ftree-loop-distribute-patterns -fvect-cost-model -ftree-partial-pre   ## optimizations for gcc compilers (2/2)
+
+OPTIMIZE += -parallel -qopenmp # for openmp
+
+GSL_INCL =  -I/opt/gsl-2.5/include
+GSL_LIBS =  -L/opt/gsl-2.5/lib
+FFTW_INCL=  -I/opt/fftw-2.1.5.v1/include
+FFTW_LIBS=  -L/opt/fftw-2.1.5.v1/lib
+MPICHLIB =
+HDF5INCL =  -I/opt/hdf5-1.12.0/include -DH5_USE_16_API
+HDF5LIB  =  -L/opt/hdf5-1.12.0/lib -lhdf5 -lz
+OPT     +=  -DOLD_HDF5 -DUSE_MPI_IN_PLACE
+endif
+
+
 #----------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------------------

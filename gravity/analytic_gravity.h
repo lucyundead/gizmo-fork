@@ -26,6 +26,7 @@ void GravAccel_RayleighTaylorTest(void);
 void GravAccel_ShearingSheet(void);
 void GravAccel_PaczynskyWiita(void);
 void GravAccel_RDITestProblem(void);
+void GravAccel_StaticLogDisc(void);
 
 /* master routine which decides which (if any) analytic gravitational forces are applied */
 void add_analytic_gravitational_forces()
@@ -43,6 +44,7 @@ void add_analytic_gravitational_forces()
     //GravAccel_GrowingDiskPotential();   // time-dependent (adiabatically growing) disk
     //GravAccel_StaticNFW();              // NFW profile sphere
     //GravAccel_PaczynskyWiita();         // Paczynsky-Wiita pseudo-Newtonian potential
+      GravAccel_StaticLogDisc();          // Logrithmic disc potential
 #endif
 
 #ifdef BOX_SHEARING
@@ -131,6 +133,27 @@ void GravAccel_RayleighTaylorTest()
 {
     int i; for(i = FirstActiveParticle; i >= 0; i = NextActiveParticle[i])
         {if(P[i].ID != 0) {P[i].GravAccel[1]=-0.5;}} /* now add the constant vertical field */
+}
+
+
+/* static Logarithmic Disc potential (G=1) */
+void GravAccel_StaticLogDisc()
+{
+
+     double Rc = 15.;
+     double V0 = 0.6;
+     double Co = 0.5*V0*V0;
+     double r2term, dr2term, dp[3];
+
+     int i,k;
+
+     for(i = FirstActiveParticle; i >= 0; i = NextActiveParticle[i])
+     {
+         dp[0]=P[i].Pos[0]; dp[1]=P[i].Pos[1]; dp[2]=P[i].Pos[2];
+         r2term = dp[0]*dp[0] + dp[1]*dp[1] + dp[2]*dp[2] + Rc*Rc;
+         dr2term = 1./r2term;
+         for(k = 0; k < 3; k++) {P[i].GravAccel[k] += -2.*Co*dp[k]*dr2term;}
+     }
 }
 
 
